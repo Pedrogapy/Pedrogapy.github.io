@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calculadora de Nível</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input { margin: 5px; }
+    button { margin: 10px 0; }
+    pre { background: #f4f4f4; padding: 10px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+
+  <h2>Calculadora de Up de Nível</h2>
+
+  <label>Nível atual: <input type="number" id="nivelAtual" min="1" value="1"></label><br>
+  <label>XP total: <input type="number" id="xpTotal" min="0" value="0"></label><br>
+
+  <button onclick="calcularNivel()">Calcular</button>
+
+  <h3>Resultado:</h3>
+  <pre id="resultado"></pre>
+
+  <script>
+    function calcularNivel() {
+      const nivelInput = document.getElementById('nivelAtual').value;
+      const xpInput = document.getElementById('xpTotal').value;
+
+      let nivelAtual = parseInt(nivelInput);
+      let xpRestante = parseInt(xpInput);
+      let proximoNivel = nivelAtual + 1;
+
+      let log = '==== Cálculo de Up de Nível ====\n\n';
+
+      while (true) {
+        let custo = 275 * proximoNivel;
+
+        if (xpRestante >= custo) {
+          xpRestante -= custo;
+          log += `Upou para o nível ${proximoNivel} | Custo: ${custo} | XP restante: ${xpRestante}\n`;
+          proximoNivel++;
+        } else {
+          log += `\nNão é possível upar para o nível ${proximoNivel} (Custo: ${custo}).\n`;
+          log += `Nível final: ${proximoNivel - 1} | XP restante: ${xpRestante}`;
+          break;
+        }
+      }
+
+      document.getElementById('resultado').textContent = log;
+    }
+  </script>
+
+</body>
+</html>
