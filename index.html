@@ -2,39 +2,47 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Calculadora de Nível</title>
+  <title>Calculadora de XP</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
-    input { margin: 5px; }
-    button { margin: 10px 0; }
-    pre { background: #f4f4f4; padding: 10px; border: 1px solid #ccc; }
+    input, select { margin: 5px; padding: 5px; }
+    button { margin: 10px 0; padding: 5px 10px; }
+    pre { background: #f4f4f4; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap; }
   </style>
 </head>
 <body>
 
-  <h2>Calculadora de Up de Nível</h2>
+  <h2>Calculadora de XP (Nível / Perícia)</h2>
+
+  <label for="tipo">Tipo de cálculo:</label>
+  <select id="tipo">
+    <option value="nivel">Nível</option>
+    <option value="pericia">Perícia</option>
+  </select><br>
 
   <label>Nível atual: <input type="number" id="nivelAtual" min="1" value="1"></label><br>
-  <label>XP total: <input type="number" id="xpTotal" min="0" value="0"></label><br>
+  <label>XP total disponível: <input type="number" id="xpTotal" min="0" value="0"></label><br>
 
-  <button onclick="calcularNivel()">Calcular</button>
+  <button onclick="calcular()">Calcular</button>
 
   <h3>Resultado:</h3>
   <pre id="resultado"></pre>
 
   <script>
-    function calcularNivel() {
-      const nivelInput = document.getElementById('nivelAtual').value;
-      const xpInput = document.getElementById('xpTotal').value;
-
-      let nivelAtual = parseInt(nivelInput);
-      let xpRestante = parseInt(xpInput);
+    function calcular() {
+      const tipo = document.getElementById('tipo').value;
+      let nivelAtual = parseInt(document.getElementById('nivelAtual').value);
+      let xpRestante = parseInt(document.getElementById('xpTotal').value);
       let proximoNivel = nivelAtual + 1;
-
-      let log = '==== Cálculo de Up de Nível ====\n\n';
+      let log = '==== Cálculo de Up ====\n\n';
 
       while (true) {
-        let custo = 275 * proximoNivel;
+        let custo;
+        if (tipo === "nivel") {
+          custo = 55 * proximoNivel;
+        } else if (tipo === "pericia") {
+          custo = 125 * proximoNivel;
+        }
 
         if (xpRestante >= custo) {
           xpRestante -= custo;
