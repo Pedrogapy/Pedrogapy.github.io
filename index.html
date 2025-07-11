@@ -2,47 +2,61 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Calculadora de XP</title>
+  <title>Calculadora de XP (Atual e Antigo)</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
+    body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
     input, select { margin: 5px; padding: 5px; }
     button { margin: 10px 0; padding: 5px 10px; }
     pre { background: #f4f4f4; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap; }
+    h2 { margin-top: 40px; }
   </style>
 </head>
 <body>
 
-  <h2>Calculadora de XP (Nível / Perícia)</h2>
+  <h1>Calculadora de XP</h1>
 
-  <label for="tipo">Tipo de cálculo:</label>
-  <select id="tipo">
+  <!-- ========================= -->
+  <!-- SEÇÃO 1: MODO ATUAL -->
+  <!-- ========================= -->
+  <h2>Modo Atual (Nível e Perícia)</h2>
+
+  <label for="tipoAtual">Tipo de cálculo:</label>
+  <select id="tipoAtual">
     <option value="nivel">Nível</option>
     <option value="pericia">Perícia</option>
   </select><br>
 
   <label>Nível atual: <input type="number" id="nivelAtual" min="1" value="1"></label><br>
-  <label>XP total disponível: <input type="number" id="xpTotal" min="0" value="0"></label><br>
+  <label>XP total disponível: <input type="number" id="xpTotalAtual" min="0" value="0"></label><br>
 
-  <button onclick="calcular()">Calcular</button>
+  <button onclick="calcularAtual()">Calcular (Modo Atual)</button>
 
-  <h3>Resultado:</h3>
-  <pre id="resultado"></pre>
+  <h3>Resultado (Modo Atual):</h3>
+  <pre id="resultadoAtual"></pre>
+
+  <!-- ========================= -->
+  <!-- SEÇÃO 2: MODO ANTIGO -->
+  <!-- ========================= -->
+  <h2>Modo Antigo (275 × Nível)</h2>
+
+  <label>Nível atual: <input type="number" id="nivelAntigo" min="1" value="1"></label><br>
+  <label>XP total disponível: <input type="number" id="xpTotalAntigo" min="0" value="0"></label><br>
+
+  <button onclick="calcularAntigo()">Calcular (Modo Antigo)</button>
+
+  <h3>Resultado (Modo Antigo):</h3>
+  <pre id="resultadoAntigo"></pre>
 
   <script>
-    function calcular() {
-      const tipo = document.getElementById('tipo').value;
+    function calcularAtual() {
+      const tipo = document.getElementById('tipoAtual').value;
       let nivelAtual = parseInt(document.getElementById('nivelAtual').value);
-      let xpRestante = parseInt(document.getElementById('xpTotal').value);
+      let xpRestante = parseInt(document.getElementById('xpTotalAtual').value);
       let proximoNivel = nivelAtual + 1;
-      let log = '==== Cálculo de Up ====\n\n';
+      let log = '==== Cálculo de Up (Modo Atual) ====\n\n';
 
       while (true) {
-        let custo;
-        if (tipo === "nivel") {
-          custo = 55 * proximoNivel;
-        } else if (tipo === "pericia") {
-          custo = 125 * proximoNivel;
-        }
+        let custo = tipo === "nivel" ? 55 * proximoNivel : 125 * proximoNivel;
 
         if (xpRestante >= custo) {
           xpRestante -= custo;
@@ -55,7 +69,30 @@
         }
       }
 
-      document.getElementById('resultado').textContent = log;
+      document.getElementById('resultadoAtual').textContent = log;
+    }
+
+    function calcularAntigo() {
+      let nivelAtual = parseInt(document.getElementById('nivelAntigo').value);
+      let xpRestante = parseInt(document.getElementById('xpTotalAntigo').value);
+      let proximoNivel = nivelAtual + 1;
+      let log = '==== Cálculo de Up (Modo Antigo) ====\n\n';
+
+      while (true) {
+        let custo = 275 * proximoNivel;
+
+        if (xpRestante >= custo) {
+          xpRestante -= custo;
+          log += `Upou para o nível ${proximoNivel} | Custo: ${custo} | XP restante: ${xpRestante}\n`;
+          proximoNivel++;
+        } else {
+          log += `\nNão é possível upar para o nível ${proximoNivel} (Custo: ${custo}).\n`;
+          log += `Nível final: ${proximoNivel - 1} | XP restante: ${xpRestante}`;
+          break;
+        }
+      }
+
+      document.getElementById('resultadoAntigo').textContent = log;
     }
   </script>
 
